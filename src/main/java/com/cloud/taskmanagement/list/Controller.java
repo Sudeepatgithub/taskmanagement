@@ -1,7 +1,9 @@
 package com.cloud.taskmanagement.list;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,27 +14,45 @@ public class Controller {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/list/{id}" ,method = RequestMethod.GET )
-    public ListBean getTasks(@PathVariable String id){
-        return service.getAllTasks(id);
+    public ResponseEntity<ListBean> getTasks(@PathVariable String id){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
+        return new ResponseEntity<>(service.getAllTasks(id),headers, HttpStatus.OK);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+
     @RequestMapping(value = "/createNew/{id}" ,method = RequestMethod.GET )
-    public void createNewList(@PathVariable String id){
+    public ResponseEntity createNewList(@PathVariable String id){
         service.createNewList(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/addTask/{id}/{name}" , method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addTask(@PathVariable String id,@PathVariable String name){
+    public ResponseEntity addTask(@PathVariable String id,@PathVariable String name){
         TaskBean taskBean = new TaskBean(name,false);
         service.addTask(id,taskBean);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/deleteTask/{id}/{taskNumber}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteTask(@PathVariable String id, @PathVariable String taskNumber){
+    public ResponseEntity deleteTask(@PathVariable String id, @PathVariable String taskNumber){
         service.deleteTask(id,Integer.parseInt(taskNumber));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
+        return new ResponseEntity<>(headers, HttpStatus.OK);
+
     }
 
 
